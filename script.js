@@ -7,37 +7,52 @@ const inputpassword = document.querySelector(".password")
 const logInBtn = document.querySelector(".logInBtn")
 const logOutBtn = document.querySelector(".logOutBtn")
 
-
 logOutBtn.style.display = "none";
 
-// fler användare lägg till fler användare?
+const users = [
+ {
+  username: "Fredrik",
+  password: "12345",
+ },
+ 
+ {
+  username: "Isabella",
+  password: "23456",
+ }
+]
 
-const username ="fredrik";
-const password ="12345";
-//const username ="isabella";
-//const password ="23456";
+ //Hämta från LS och kolla om man är inloggad
+function init(){
+if (localStorage.getItem("username")){
+renderSuccsessfulUL();
+ }
+}
 
+init();
 
+//All users saved in localStorage
+if (!localStorage.getItem("users")){
+localStorage.setItem ("users", JSON.stringify(users))
+}
 
+//
 logInBtn.addEventListener("click", checkUser);
 logOutBtn.addEventListener("click", logout);
-
-
-logInPage
 
 //Function to check if user and password is correct
 function checkUser (){
 
-if (inputusername.value  === username && inputpassword.value === password ){
- renderSuccsessfulUL()
+for(const user of users){
 
-}else{
- renderFailUI();
+if (inputusername.value  === user.username && inputpassword.value === user.password ){
+  localStorage.setItem ("username",user.username)
+  renderSuccsessfulUL()
+
+ return
+ } 
 }
+renderFailUI();
 }
-
-
-
 
 //Function loginpage
 function logInPage(){
@@ -46,13 +61,13 @@ logOutBtn.style.display = "none";
 
 //Function render successful UI
 function renderSuccsessfulUL(){
- text.innerText = "Välkommen!"; //+användarnamn
+ const loggedInUser = localStorage.getItem ("username")
+ text.innerText = "Välkommen " + loggedInUser + " !"
  form.style.display = "none";
-logOutBtn.style.display = "block";
+ logOutBtn.style.display = "block";
 }
 
 //Function render fail UL
-
 function renderFailUI (){
  text.innerText = "Fel användarnamn eller lösenord, försök igen!";
  input.value = "";
@@ -63,7 +78,5 @@ function logout(){ //return to log in sidan
  text.innerText = "Logga in igen!";
  logOutBtn.style.display = "none";
  form.style.display = "block"
-
+ localStorage.removeItem ("username")
 }
-
-console.log ("tjena")
